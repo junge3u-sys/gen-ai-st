@@ -91,6 +91,18 @@
   .imp-상   { background: #04342c; color: #5dcaa5; border: 0.5px solid #085041; }
   .imp-중   { background: #26215c; color: #afa9ec; border: 0.5px solid #3c3489; }
   .imp-하   { background: #2c2c2a; color: #888780; border: 0.5px solid #444441; }
+
+  /* 기출 리스트 테이블 */
+  .gichul-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .gichul-table th { background: #2c2c2a; color: #888780; font-weight: 600; padding: 6px 10px; text-align: left; border-bottom: 0.5px solid #444441; }
+  .gichul-table td { padding: 8px 10px; border-bottom: 0.5px solid #2a2a28; color: #d3d1c7; vertical-align: top; line-height: 1.6; }
+  .gichul-table tr:last-child td { border-bottom: none; }
+  .gichul-table tr:hover td { background: #1e1e1c; }
+  .td-round { background: #333330; color: #b4b2a9; border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .gichul-note { font-size: 10px; color: #5dcaa5; background: #04342c; border: 0.5px solid #085041; border-radius: 6px; padding: 7px 10px; margin-bottom: 10px; line-height: 1.6; }
+  .section-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+  .tag-gichul { background: #412402; color: #ef9f27; border: 0.5px solid #633806; }
+  .tag-topic  { background: #04342c; color: #5dcaa5; border: 0.5px solid #085041; }
 </style>
 </head>
 <body>
@@ -319,12 +331,13 @@
 const DATA = {
   RAG: {
     label: 'RAG · Advanced RAG · Modular RAG',
+    note: '본 개념 → 비교(RAG vs FT) → 심화 비교(Advanced vs Modular RAG)로 난이도가 단계적으로 올라가는 흐름',
     gichul: [
-      { meta: '정보관리 139회 1교시', text: 'Advanced RAG(Retrieval-Augmented Generation)와 Modular RAG 비교' },
-      { meta: '정보관리 139회 2교시', text: 'A기업은 AI 전환(AX) 추진을 위해 LLM 기반 AI 시스템을 구축하고자 한다.\n가. 파인튜닝(Fine-Tuning)과 RAG의 개념 및 역할\n나. RLHF 기반 학습 파이프라인과 RAFT(Retrieval Augmented Fine-Tuning) 기반 학습 파이프라인 비교' },
-      { meta: '정보관리 135회 1교시', text: 'RAG (Retrieval Augmented Generation)' },
-      { meta: '정보관리 134회 1교시', text: 'RAG (Retrieval Augmented Generation)' },
-      { meta: '컴시응 137회 1교시', text: 'RAG(Retrieval Augmented Generation)와 Fine Tuning의 기본 개념과 대표 프레임워크' }
+      { round: '134회', exam: '정보관리기술사', gyosi: '1교시', num: '13번', text: 'RAG (Retrieval Augmented Generation)' },
+      { round: '135회', exam: '컴퓨터시스템응용기술사', gyosi: '1교시', num: '12번', text: 'RAG (Retrieval-Augmented Generation)' },
+      { round: '137회', exam: '컴퓨터시스템응용기술사', gyosi: '1교시', num: '8번', text: 'RAG와 Fine Tuning의 기본 개념 및 대표 프레임워크' },
+      { round: '137회', exam: '정보관리기술사', gyosi: '4교시', num: '2번', text: '벡터 데이터베이스(Vector Database)의 효율적 검색을 위한 HNSW(Hierarchical Navigable Small World)와 IVF(Inverted File Index)의 동작원리를 설명하시오.' },
+      { round: '139회', exam: '정보관리기술사', gyosi: '1교시', num: '3번', text: 'Advanced RAG와 Modular RAG 비교' }
     ],
     topics: [
       { imp: '최상', text: 'RAG(Retrieval-Augmented Generation)' },
@@ -407,27 +420,39 @@ function openModal(key) {
   document.getElementById('modal-title').textContent = d.label;
   let html = '';
 
-  html += `<div class="modal-section">`;
-  html += `<div class="modal-section-title" style="color:#ef9f27;">📋 기출 문제 (${d.gichul.length}건)</div>`;
+  // 기출 섹션
+  html += `<span class="section-tag tag-gichul">📋 기출 문제 ${d.gichul.length}건</span>`;
   if (!d.gichul.length) {
     html += `<p class="modal-empty">직접 매핑된 기출 문제 없음</p>`;
   } else {
+    if (d.note) html += `<div class="gichul-note">${d.note}</div>`;
+    html += `<table class="gichul-table"><thead><tr><th>회차</th><th>시험</th><th>교시</th><th>번호</th><th>주제</th></tr></thead><tbody>`;
     d.gichul.forEach(g => {
-      html += `<div class="modal-item"><div class="item-meta">${g.meta}</div><div class="item-text" style="white-space:pre-line;">${g.text}</div></div>`;
+      html += `<tr>
+        <td><span class="td-round">${g.round || ''}</span></td>
+        <td style="color:#888780;white-space:nowrap;">${g.exam || g.meta || ''}</td>
+        <td style="color:#888780;white-space:nowrap;">${g.gyosi || ''}</td>
+        <td style="color:#888780;white-space:nowrap;">${g.num || ''}</td>
+        <td>${g.text}</td>
+      </tr>`;
     });
+    html += `</tbody></table>`;
   }
-  html += `</div>`;
 
-  html += `<div class="modal-section">`;
-  html += `<div class="modal-section-title" style="color:#5dcaa5;">📚 기본 토픽 (${d.topics.length}건)</div>`;
+  // 구분
+  html += `<div style="border-top:0.5px dashed #333330;margin:14px 0 10px;"></div>`;
+
+  // 토픽 섹션
+  html += `<span class="section-tag tag-topic">📚 기본 토픽 ${d.topics.length}건</span>`;
   if (!d.topics.length) {
-    html += `<p class="modal-empty">직접 매핑된 토픽 없음</p>`;
+    html += `<p class="modal-empty" style="margin-top:6px;">직접 매핑된 토픽 없음</p>`;
   } else {
+    html += `<div style="margin-top:6px;">`;
     d.topics.forEach(t => {
       html += `<div class="modal-item">${impTag(t.imp)}<span class="item-text">${t.text}</span></div>`;
     });
+    html += `</div>`;
   }
-  html += `</div>`;
 
   document.getElementById('modal-body').innerHTML = html;
   document.getElementById('modal-overlay').classList.add('open');
