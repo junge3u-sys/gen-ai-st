@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기술사 AI 도메인 - 1장 정리</title>
+<style>
+  :root {
+    --line: #444;
+    --required: #d62828;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    margin: 0; padding: 16px; background: #fafafa; color: #222;
+  }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .subtitle { font-size: 13px; color: #555; margin-bottom: 16px; }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .part {
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    display: flex; flex-direction: column;
+  }
+  .part-header {
+    background: #1a1a1a; color: #fff;
+    font-weight: bold; font-size: 16px;
+    padding: 8px 12px;
+  }
+  .part.p2 .part-header { background: #2c5d8f; }
+  .part.p4 .part-header { background: #a02525; }
+  .part.p5 .part-header { background: #2a2a2a; }
+
+  .topic-list {
+    display: flex; flex-direction: column;
+    padding: 8px;
+    gap: 6px;
+    flex: 1;
+  }
+  .topic {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    background: #fdfdfd;
+    transition: background .15s, border-color .15s;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .topic:hover {
+    background: #eef5ff;
+    border-color: #2c5d8f;
+  }
+  .topic.disabled {
+    cursor: default;
+    background: #f9f9f9;
+  }
+  .topic.disabled:hover { background: #f9f9f9; border-color: #ccc; }
+  .topic-name { flex: 1; }
+  .badge-group {
+    display: flex; gap: 4px; flex-shrink: 0;
+  }
+  .badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 3px;
+    padding: 2px 6px;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .badge.imp-top { background: #d62828; }
+  .badge.imp-high { background: #e07b00; }
+  .badge.imp-mid { background: #2c5d8f; }
+  .badge.imp-low { background: #6c757d; }
+  .badge.imp-none { background: #aaa; }
+  .badge.nahun { background: #6a1b9a; }
+
+  /* Modal */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 999;
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .overlay.active { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 8px;
+    max-width: 720px; width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .modal h2 {
+    font-size: 17px;
+    margin: 0 0 4px;
+    padding-right: 30px;
+  }
+  .modal .modal-badges {
+    margin-bottom: 12px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .modal .modal-badges .badge {
+    font-size: 12px;
+    padding: 3px 9px;
+  }
+  .close-btn {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none;
+    font-size: 22px; cursor: pointer; color: #999;
+    line-height: 1;
+  }
+  .close-btn:hover { color: #333; }
+  .question-block {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: #f9fafb;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .question-block:last-child { margin-bottom: 0; }
+  .question-block .qnum {
+    font-weight: bold;
+    color: #2c5d8f;
+    margin-right: 4px;
+  }
+  .empty-note {
+    font-size: 13px; color: #888; padding: 8px 0;
+  }
+  .legend {
+    margin-top: 16px;
+    font-size: 12px; color: #555;
+    display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+  }
+  .legend .badge { position: relative; top: -1px; }
+</style>
+</head>
+<body>
+
+<h1>기술사 AI 도메인 - 1장 정리 (기출 + 중요도)</h1>
+<div class="subtitle">개념정립(1960) → 1차암흑기 → 2차 암흑기 → 딥러닝(2010) → LLM (2020) → 인공지능 특이점(2030)</div>
+
+<div class="board">
+  <div class="part p1">
+    <div class="part-header">❶ AI 개요</div>
+    <div class="topic-list">
+      <div class="topic disabled"><span class="topic-name">전문가시스템 / 유전자알고리즘 / 메타휴리스틱</span><span class="badge-group"><span class="badge imp-mid">중</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p1',1)"><span class="topic-name">AX (AI Transformation)</span><span class="badge-group"><span class="badge imp-top">필수</span></span></div>
+      <div class="topic" onclick="openModal('p1',2)"><span class="topic-name">AI 거버넌스 / AI 윤리</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-top">최상</span></span></div>
+      <div class="topic" onclick="openModal('p1',3)"><span class="topic-name">AI 신뢰성 (XAI / 신뢰성 인증제도)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p1',4)"><span class="topic-name">AI 오용 / 딥페이크</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-mid">중</span></span></div>
+      <div class="topic" onclick="openModal('p1',5)"><span class="topic-name">AI 기본법 / 거버넌스 정책</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span><span class="badge nahun">남훈</span></span></div>
+      <div class="topic disabled"><span class="topic-name">ISO 42001 (AI 경영시스템)</span><span class="badge-group"><span class="badge imp-high">상</span></span></div>
+      <div class="topic disabled"><span class="topic-name">AI RMF(Risk Management Framework)</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">ISO/PAS 8800:2024 AI 안전 확보</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">모라벡의 역설(Moravec’s Paradox)</span><span class="badge-group"><span class="badge imp-low">하</span></span></div>
+      <div class="topic disabled"><span class="topic-name">술어 논리 (PredicateLogic)</span><span class="badge-group"><span class="badge imp-low">하</span></span></div>
+      <div class="topic disabled"><span class="topic-name">ANI (Artificial Narrow Intelligence)</span><span class="badge-group"><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">귀납적사고(Inductive Reasoning)와 기계학습</span><span class="badge-group"><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">범용인공지능위험관리프레임워크</span><span class="badge-group"><span class="badge imp-none">미평가</span></span></div>
+    </div>
+  </div>
+  <div class="part p2">
+    <div class="part-header">❷ 기계학습 (Machine Learning)</div>
+    <div class="topic-list">
+      <div class="topic" onclick="openModal('p2',0)"><span class="topic-name">기계학습 개념 및 기본 알고리즘 (학습데이터 / 분류)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-low">하</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p2',1)"><span class="topic-name">KNN / 의사결정트리 / SVM / 로지스틱회귀</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p2',2)"><span class="topic-name">회귀모델 / 분류 / 군집 비교</span><span class="badge-group"><span class="badge imp-top">필수</span></span></div>
+      <div class="topic disabled"><span class="topic-name">K-means / EM clustering / DBSCAN (비지도/준지도학습)</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">차원축소 (PCA / SOM)</span><span class="badge-group"><span class="badge imp-low">하</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">강화학습 (Q-Learning / MCTS / RLHF·DPO)</span><span class="badge-group"><span class="badge imp-low">하</span></span></div>
+      <div class="topic" onclick="openModal('p2',6)"><span class="topic-name">인공신경망 (퍼셉트론 / 역전파 / 활성화함수)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p2',7)"><span class="topic-name">딥러닝 - 파라미터/하이퍼파라미터 튜닝</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">딥러닝 구조 (CNN/RNN/LSTM/GRU, SNN/GNN)</span><span class="badge-group"><span class="badge imp-high">상</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p2',9)"><span class="topic-name">초거대AI / NER / LLM→LMM→LAM</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p2',10)"><span class="topic-name">RAG / RIG / 지식그래프 / 벡터DB</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-top">최상</span></span></div>
+      <div class="topic" onclick="openModal('p2',11)"><span class="topic-name">에이전틱AI / MCP / A2A</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p2',12)"><span class="topic-name">[모델평가] 검증/교차검증/혼동행렬/손실함수</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p2',13)"><span class="topic-name">과적합(Overfitting) / 정규화 / Dropout</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p2',14)"><span class="topic-name">모델 결합(앙상블) - 배깅/부스팅/스태킹</span><span class="badge-group"><span class="badge imp-top">필수</span></span></div>
+      <div class="topic" onclick="openModal('p2',15)"><span class="topic-name">머신러닝 최적화 알고리즘</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span></span></div>
+    </div>
+  </div>
+  <div class="part p3">
+    <div class="part-header">❸ AI 기술</div>
+    <div class="topic-list">
+      <div class="topic disabled"><span class="topic-name">이미지 인식 (어노테이션 / R-CNN / YOLO / ViT 등)</span><span class="badge-group"><span class="badge imp-low">하</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">자연어 처리 (어텐션/트랜스포머/워드임베딩)</span><span class="badge-group"><span class="badge imp-mid">중</span><span class="badge imp-low">하</span></span></div>
+      <div class="topic" onclick="openModal('p3',2)"><span class="topic-name">생성형 AI - 멀티모달 / 딥페이크</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p3',3)"><span class="topic-name">생성적 적대 신경망 (GAN/VAE/AE/DCGAN)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">Stable Diffusion / Text to SQL</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic" onclick="openModal('p3',5)"><span class="topic-name">양자 머신러닝 (QML)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p3',6)"><span class="topic-name">바이브 코딩 (Vibe Coding)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span></span></div>
+      <div class="topic" onclick="openModal('p3',7)"><span class="topic-name">AI 슈퍼앱 (카카오톡 x OpenAI)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span></span></div>
+      <div class="topic" onclick="openModal('p3',8)"><span class="topic-name">의도 기반 네트워킹 (Intent-Based Networking)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span></span></div>
+      <div class="topic disabled"><span class="topic-name">AI 기술 (시계열딥러닝, 강화학습, 그래프신경망)</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">음성데이터마이닝</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+      <div class="topic disabled"><span class="topic-name">터보퀀트</span><span class="badge-group"><span class="badge imp-mid">중</span></span></div>
+    </div>
+  </div>
+  <div class="part p4">
+    <div class="part-header">❹ AI 보안</div>
+    <div class="topic-list">
+      <div class="topic" onclick="openModal('p4',0)"><span class="topic-name">AI 보안 안내서 / 머신러닝 보안 취약점(적대적공격)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-top">최상</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span></span></div>
+      <div class="topic" onclick="openModal('p4',1)"><span class="topic-name">개인정보보호 - AI 프라이버시 리스크 관리모델</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge nahun">남훈</span></span></div>
+      <div class="topic" onclick="openModal('p4',2)"><span class="topic-name">생성형AI 개인정보 처리 안내서 (2025.8)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span></span></div>
+      <div class="topic" onclick="openModal('p4',3)"><span class="topic-name">가명처리기준 / 영지식증명 / PET</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge nahun">남훈</span></span></div>
+      <div class="topic disabled"><span class="topic-name">연합학습 / 합성데이터</span><span class="badge-group"><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p4',5)"><span class="topic-name">AI 리스크 (보안/프라이버시/사회적)</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p4',6)"><span class="topic-name">AI 창작물 지식재산권 / 저작권</span><span class="badge-group"><span class="badge imp-top">필수</span></span></div>
+      <div class="topic disabled"><span class="topic-name">MLOps/FMOps/LLMOps - 적대적공격, LLM보안취약점, MCP취약점</span><span class="badge-group"><span class="badge imp-top">최상</span><span class="badge imp-high">상</span><span class="badge nahun">남훈</span></span></div>
+      <div class="topic" onclick="openModal('p4',8)"><span class="topic-name">AI 품질보증 프레임워크</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span></span></div>
+    </div>
+  </div>
+  <div class="part p5">
+    <div class="part-header">❺ 하드웨어🔥</div>
+    <div class="topic-list">
+      <div class="topic" onclick="openModal('p5',0)"><span class="topic-name">AI 반도체 - GPU/GPGPU/Multi-GPU/GPUaaS</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-low">하</span></span></div>
+      <div class="topic" onclick="openModal('p5',1)"><span class="topic-name">HBM / NPU / CXL (고성능 컴퓨팅, HPC)</span><span class="badge-group"><span class="badge imp-top">필수</span><span class="badge imp-high">상</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic" onclick="openModal('p5',2)"><span class="topic-name">경량모델 - 엣지AI / 온디바이스AI / 모바일LLM</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span><span class="badge imp-mid">중</span></span></div>
+    </div>
+  </div>
+  <div class="part p6">
+    <div class="part-header">❻ 서비스</div>
+    <div class="topic-list">
+      <div class="topic disabled"><span class="topic-name">협업필터링</span><span class="badge-group"><span class="badge imp-high">상</span><span class="badge nahun">남훈</span></span></div>
+      <div class="topic" onclick="openModal('p6',1)"><span class="topic-name">소버린 AI</span><span class="badge-group"><span class="badge imp-low">기출 1회</span></span></div>
+      <div class="topic" onclick="openModal('p6',2)"><span class="topic-name">AI 데이터 품질관리 가이드라인 v3.5</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-high">상</span></span></div>
+      <div class="topic" onclick="openModal('p6',3)"><span class="topic-name">데이터 거버넌스 - 표준화/리니지/카탈로그</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-mid">중</span></span></div>
+      <div class="topic" onclick="openModal('p6',4)"><span class="topic-name">데이터 레이크 / 데이터 스웜프</span><span class="badge-group"><span class="badge imp-low">기출 1회</span><span class="badge imp-mid">중</span><span class="badge imp-none">미평가</span></span></div>
+      <div class="topic disabled"><span class="topic-name">하네스 엔지니어링 (Harness Engineering)</span><span class="badge-group"><span class="badge nahun">남훈</span></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="badge imp-top">필수</span> 셀테 2회 이상 출제&nbsp;&nbsp;|&nbsp;&nbsp;
+  <span class="badge imp-low">기출 1회</span> 셀테 1회 출제
+  <br/>
+  <span class="badge imp-top">최상</span>
+  <span class="badge imp-high">상</span>
+  <span class="badge imp-mid">중</span>
+  <span class="badge imp-low">하</span>
+  <span class="badge imp-none">미평가</span>
+  : 기술사 핵심토픽 CSV 기준 중요도
+  <br/>
+  <span class="badge nahun">남훈</span> 남훈기술사 필수 강조 토픽
+</div>
+
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="closeModal()">&times;</button>
+    <h2 id="modal-title"></h2>
+    <div class="modal-badges" id="modal-badges"></div>
+    <div id="modal-questions"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {"parts": [{"id": "p1", "title": "❶ AI 개요", "color": "#f4f4f4", "topics": [{"name": "전문가시스템 / 유전자알고리즘 / 메타휴리스틱", "count": 0, "questions": [], "importances": ["중", "미평가"]}, {"name": "AX (AI Transformation)", "count": 11, "questions": ["AX (AI Transformation)", "DX (Digital Transformation)와 AX (AI Transformation) 비교"], "importances": []}, {"name": "AI 거버넌스 / AI 윤리", "count": 12, "questions": ["인공지능의 개발 및 적용과정에서 윤리적으로 다루어져야할 주요내용과 인공지능을 효과적으로 관리하고 규제하기위한 거버넌스 모형에 대해 설명하시오."], "importances": ["최상"]}, {"name": "AI 신뢰성 (XAI / 신뢰성 인증제도)", "count": 2, "questions": ["인공지능 신뢰성의 개념과 핵심속성에 대하여 설명하시오", "최근 AI 의 가파른 기술 발전로 인해 AI 의 긍정적 효과뿐만 아니라, 부정적 영향에 대한 우려의 목소리도 높아지고 있는 상황이다. 이에 AI 신뢰성 확보를 위한 AI 개발·서비스 제공 기업의 자율적 노력이 절실히 요구되고 있다. 다음에 대해 설명하시오.\n가. AI 신뢰성의 개념\n나. 생성형 AI 신뢰성 확보를 위한 데이터 검증\n다. AI 신뢰성 인증제도(Certification of AI Trustworthiness, CAT)"], "importances": ["미평가"]}, {"name": "AI 오용 / 딥페이크", "count": 1, "questions": ["딥페이크 규제 및 감지 기술에 대해 설명하시오."], "importances": ["중"]}, {"name": "AI 기본법 / 거버넌스 정책", "count": 1, "questions": ["\"인공지능기본법 시행령 초안\"(2025.09)이 발표되었다. 이와 관련하여 다음에 대해 설명하시오.\n가. EU 의 AI Act 와 한국의 AI 기본법 비교\n나. 인공지능 안전성 확보 적용 대상 및 안전성 확보 활동\n다. 고영향 인공지능 및 고영향 인공지능 사업자 책무"], "importances": ["상"], "extra_tags": ["남훈"]}, {"name": "ISO 42001 (AI 경영시스템)", "count": 0, "questions": [], "importances": ["상"]}, {"name": "AI RMF(Risk Management Framework)", "count": 0, "questions": [], "importances": ["중"]}, {"name": "ISO/PAS 8800:2024 AI 안전 확보", "count": 0, "questions": [], "importances": ["중"]}, {"name": "모라벡의 역설(Moravec’s Paradox)", "count": 0, "questions": [], "importances": ["하"]}, {"name": "술어 논리 (PredicateLogic)", "count": 0, "questions": [], "importances": ["하"]}, {"name": "ANI (Artificial Narrow Intelligence)", "count": 0, "questions": [], "importances": ["미평가"]}, {"name": "귀납적사고(Inductive Reasoning)와 기계학습", "count": 0, "questions": [], "importances": ["미평가"]}, {"name": "범용인공지능위험관리프레임워크", "count": 0, "questions": [], "importances": ["미평가"]}]}, {"id": "p2", "title": "❷ 기계학습 (Machine Learning)", "color": "#dbe9f7", "topics": [{"name": "기계학습 개념 및 기본 알고리즘 (학습데이터 / 분류)", "count": 5, "questions": ["인공지능의 실현을 위하여 기계학습(Machine Learning) 분야에서 다양하고 활발한 연구가 진행되고 있다.\n(1) 기계학습의 정의 및 기본 알고리즘을 설명하시오.\n(2) 기계학습을 학습데이터의 제공방식에 따라 분류하고, 해당 유형별로 학습기술 또는 알고리즘을 설명하시오.", "인공지능의 실현을 위해 기계학습(Machine Learning) 분야에서 다양하고 활발한 연구가 진행되고 있다. 아래사항에 대해 설명하시오\n가. 기계학습의 정의 및 기본 알고리즘\n나. 기계학습의 학습데이터 제공방식에 따른 분류 및 해당 유형별 학습기술\n다. 기계학습을 주차 문제 예측 시스템 개발에 적용하고자 할 때, 이에 대한 구현방법"], "importances": ["하", "미평가"]}, {"name": "KNN / 의사결정트리 / SVM / 로지스틱회귀", "count": 2, "questions": ["SVM (Support Vector Machine)에 대하여 설명하시오.", "통계학의 4가지 척도를 구분하고, 이 관점에서 다중회귀분석(Multiple Regression Analysis)과 로지스틱회귀분석(Logistic Regression Analysis)을 비교하시오."], "importances": ["상"]}, {"name": "회귀모델 / 분류 / 군집 비교", "count": 3, "questions": ["분류(Classification), 군집(Clustering), 회귀(Regression)을 비교하여 설명하시오."], "importances": []}, {"name": "K-means / EM clustering / DBSCAN (비지도/준지도학습)", "count": 0, "questions": [], "importances": ["중"]}, {"name": "차원축소 (PCA / SOM)", "count": 0, "questions": [], "importances": ["하", "미평가"]}, {"name": "강화학습 (Q-Learning / MCTS / RLHF·DPO)", "count": 0, "questions": [], "importances": ["하"]}, {"name": "인공신경망 (퍼셉트론 / 역전파 / 활성화함수)", "count": 5, "questions": ["인공신경망에 대하여 다음을 설명하시오.\n가. 인공신경망의 개념, 구성요소, 역할\n나. 피드포워드 뉴럴네트워크 개념 및 절차\n다. 역전파 개념 및 절차\n라. 활성화 함수의 종류 및 역할"], "importances": ["상", "미평가"]}, {"name": "딥러닝 - 파라미터/하이퍼파라미터 튜닝", "count": 12, "questions": ["딥러닝(Deep Learning)의 파라미터와 하이퍼파라미터를 비교하고, 하이퍼파라미터의 튜닝 방법을 설명하시오."], "importances": ["상", "중", "미평가"]}, {"name": "딥러닝 구조 (CNN/RNN/LSTM/GRU, SNN/GNN)", "count": 0, "questions": [], "importances": ["상", "미평가"]}, {"name": "초거대AI / NER / LLM→LMM→LAM", "count": 5, "questions": ["최근 초거대 인공지능(AI: Artificial Intelligence) 도입 및 활용에 필요한 사항을 담은 \"공공 부문 초거대 AI 도입·활용 가이드라인\"이 발표되었다. 다음 항목에 관하여 설명하시오.\n가. 초거대 AI 개념\n나. 초거대 AI 도입 원칙\n다. 초거대 AI 도입 시 사전 고려사항", "공공부문 초거대 AI 도입 활용 가이드라인 2.0에 대하여 다음을 설명하시오\n가. 초거대 AI의 개념과 구성요소\n나. 초거대 AI의 기술요소\n다. 초거대 AI의 도입 절차", "LLM은 LMM을 거쳐 LAM으로 발전하며 물리 환경과 데이터를 통합적으로 이해·추론·제어하는 기술로 확장되고 있다. 이에 산업 현장에서는 LAM을 기반으로 한 고도화된 예지정비 기술 도입 논의가 활발하게 이루어지고 있다. 다음을 설명하시오.\n가. 예지정비(Predictive Maintenance)의 목적과 효과\n나. 예지정비 시스템에 피지컬 AI(Physical AI)를 구현하기 위한 방안"], "importances": ["상"]}, {"name": "RAG / RIG / 지식그래프 / 벡터DB", "count": 3, "questions": ["RAG (Retrieval Augmented Generation)에 대하여 설명하시오.", "Advanced RAG (Retrieval-Augmented Generation) & Modular RAG(Retrieval-Augmented Generation)를 비교하시오.", "RAGaaS (Retrieval Augmented Generation-as-a-Service)에 대하여 설명하시오."], "importances": ["최상"]}, {"name": "에이전틱AI / MCP / A2A", "count": 6, "questions": ["에이전틱 AI (Agentic AI)에 대하여 설명하시오.", "MCP(Model Context Protocol) 개인정보 보안을 강화하기 위한 기술에 대하여 설명하시오."], "importances": ["상"]}, {"name": "[모델평가] 검증/교차검증/혼동행렬/손실함수", "count": 5, "questions": ["머신러닝 모델은 학습과 함께 검증 및 평가 과정이 필요하다.\n가. 교차검증(k-fold Cross Validation) 기법에 대하여 설명하시오\n나. 머신러닝 모델의 평가방법에 대하여 설명하시오"], "importances": ["상", "중", "미평가"]}, {"name": "과적합(Overfitting) / 정규화 / Dropout", "count": 3, "questions": ["과적합(Overfitting)의 발생이유와 해결방안에 대해 설명하시오.", "과적합(Overfitting)과 과소적합(Underfitting)의 발생 원인과 해결 방안에 대해 설명하시오."], "importances": ["상"]}, {"name": "모델 결합(앙상블) - 배깅/부스팅/스태킹", "count": 2, "questions": ["앙상블(Ensemble) 기법에 대하여 설명하시오."], "importances": []}, {"name": "머신러닝 최적화 알고리즘", "count": 2, "questions": ["머신러닝 최적화 알고리즘 (Optimization Algorithm) 유형 및 장단점에 대하여 설명하시오."], "importances": ["상", "중"]}]}, {"id": "p3", "title": "❸ AI 기술", "color": "#f4f4f4", "topics": [{"name": "이미지 인식 (어노테이션 / R-CNN / YOLO / ViT 등)", "count": 0, "questions": [], "importances": ["하", "미평가"]}, {"name": "자연어 처리 (어텐션/트랜스포머/워드임베딩)", "count": 0, "questions": [], "importances": ["중", "하"]}, {"name": "생성형 AI - 멀티모달 / 딥페이크", "count": 2, "questions": ["멀티모달 (Multi-Modal)에 대하여 설명하시오."], "importances": ["상"]}, {"name": "생성적 적대 신경망 (GAN/VAE/AE/DCGAN)", "count": 2, "questions": ["생성적 적대 신경망(Generative Adversarial Networks)에 대하여 설명하시오."], "importances": ["상", "중"]}, {"name": "Stable Diffusion / Text to SQL", "count": 0, "questions": [], "importances": ["중"]}, {"name": "양자 머신러닝 (QML)", "count": 1, "questions": ["양자머신러닝(QML, Quantum Machine Learning)에 대하여 설명하시오."], "importances": ["상"]}, {"name": "바이브 코딩 (Vibe Coding)", "count": 1, "questions": ["최근 AI기술을 활용하여 SW생산성을 획기적으로 높이는 바이브 코딩에 대한 관심이 뜨겁다. 바이브 코딩(Vibe Coding) 개념 및 기술요소와 장점, 한계에 대하여 설명하시오.\n가. 바이브코딩 개념\n나. 바이브코딩 장점과 한계\n다. 바이브코딩 한계에 대한 극복방안"], "importances": []}, {"name": "AI 슈퍼앱 (카카오톡 x OpenAI)", "count": 1, "questions": ["최근 카카오톡은 OpenAI 와의 전략적 협업을 통해 AI 슈퍼앱으로의 전환을 추진하고 있다. 이와 관련하여 다음을 설명하시오.\n가. AI 슈퍼앱의 개념\n나. AI 슈퍼앱 기술요소\n다. AI 슈퍼앱 단계적 구축 로드맵"], "importances": []}, {"name": "의도 기반 네트워킹 (Intent-Based Networking)", "count": 1, "questions": ["인공지능 기술을 기반으로 유무선망 설정을 자동으로 수행하는 의도 기반 네트워킹에 대해 설명하시오.\n가. 의도 기반 네트워킹 개념\n나. 의도 기반 시스템의 의도 라이프사이클\n다. 의도 기반 네트워킹 시스템 구축 단계"], "importances": []}, {"name": "AI 기술 (시계열딥러닝, 강화학습, 그래프신경망)", "count": 0, "questions": [], "importances": ["중"]}, {"name": "음성데이터마이닝", "count": 0, "questions": [], "importances": ["중"]}, {"name": "터보퀀트", "count": 0, "questions": [], "importances": ["중"]}]}, {"id": "p4", "title": "❹ AI 보안", "color": "#f9d6d6", "topics": [{"name": "AI 보안 안내서 / 머신러닝 보안 취약점(적대적공격)", "count": 3, "questions": ["머신러닝 보안 취약점에 대하여 설명하시오.\n가. 머신러닝 학습과정에서의 적대적 공격 4가지\n나. 각각 적대적 공격의 방어기법"], "importances": ["최상", "상", "중"]}, {"name": "개인정보보호 - AI 프라이버시 리스크 관리모델", "count": 1, "questions": ["개인정보보호위원회는 2024년 12월에 AI 기업이 자율적으로 프라이버시 리스크를 관리할 수 있도록 기존의 AI 개인 정보 자율점검표를 대체하는 「안전한 인공지능(AI)·데이터 활용을 위한 AI 프라이버시 리스크 관리 모델」을 공개하였다. 관련해서 다음을 설명하시오.\n가. 리스크 관리 모델 절차 및 경감 방안\n나. AI 프라이버시 리스크의 관리 체계"], "importances": [], "extra_tags": ["남훈"]}, {"name": "생성형AI 개인정보 처리 안내서 (2025.8)", "count": 1, "questions": ["개인정보 보호위원회는 AI 심화 시대에 대응하기 위해 ‘생성형 인공지능(AI) 개발·활용을 위한 개인정보 처리 안내서(2025.8.)’을 발간하였다. 다음에 대해 설명하시오.\n가. 생성형 AI 개발·활용 단계별 침해 리스크\n나. 생성형 AI 개발·활용 단계별 침해 방지를 위한 고려사항"], "importances": []}, {"name": "가명처리기준 / 영지식증명 / PET", "count": 3, "questions": ["PETs(Privacy Enhancing Technology)에 대하여 설명하시오."], "importances": [], "extra_tags": ["남훈"]}, {"name": "연합학습 / 합성데이터", "count": 0, "questions": [], "importances": ["상"]}, {"name": "AI 리스크 (보안/프라이버시/사회적)", "count": 1, "questions": ["인공지능(AI) 기술의 급속한 발전은 혁신적 변화와 함께 다양한 리스크(Risk)를 수반한다. AI 리스크에 대하여 다음을 설명하시오.\n가. AI 리스크 개념\n나. AI 보안 리스크\n다. AI 프라이버시 리스크\n라. AI 사회적 리스크"], "importances": ["상"]}, {"name": "AI 창작물 지식재산권 / 저작권", "count": 2, "questions": ["최근 ChatGPT 등 생성형 AI 모델이 고유한 창작자의 작품을 무단으로 학습하거나 유사하게 생성하는 사례가 급증하고 있다. 창작물이 AI 학습에 활용되어 저작권 침해 및 부정경쟁 문제로 이어지고 있는 상황에서, 다음 항목에 대해 설명하시오.\n가. 지식재산권의 개념과 종류\n나. AI 창작물에 대한 지식재산권 적용 문제\n다. 지식재산권 적용 문제 대응 방안"], "importances": []}, {"name": "MLOps/FMOps/LLMOps - 적대적공격, LLM보안취약점, MCP취약점", "count": 0, "questions": [], "importances": ["최상", "상"], "extra_tags": ["남훈"]}, {"name": "AI 품질보증 프레임워크", "count": 1, "questions": ["AI 품질 보증 프레임워크에 대하여 설명하시오."], "importances": ["상"]}]}, {"id": "p5", "title": "❺ 하드웨어🔥", "color": "#f4f4f4", "topics": [{"name": "AI 반도체 - GPU/GPGPU/Multi-GPU/GPUaaS", "count": 2, "questions": ["GPU(Graphic Processing Unit)와 CPU(Central Processing Unit)의 차이점에 대하여 설명하시오."], "importances": ["상", "하"]}, {"name": "HBM / NPU / CXL (고성능 컴퓨팅, HPC)", "count": 2, "questions": ["최근 AI 기술의 발전과 고성능 연산 요구가 급격히 증가함에 따라 고성능 컴퓨팅(HPC, High Performance Computing)의 필요성이 크게 높아지고 있다. 매년 개최되는 '한국슈퍼컴퓨팅컨퍼런스'에서는 AI, 바이오, 기상, 기계학습 등 다양한 분야에서 HPC 의 중요성 및 최신 동향이 집중 조명되고 있음을 알 수 있다. 다음에 대하여 설명하시오.\n가. HBM(High Bandwidth Memory)\n나. NPU(Neural Processing Unit)\n다. CXL(Compute Express Link)의 프로토콜"], "importances": ["상", "미평가"]}, {"name": "경량모델 - 엣지AI / 온디바이스AI / 모바일LLM", "count": 1, "questions": ["온디바이스 AI(Artificial Intelligence)에 대한 아래의 사항을 설명하시오.\n가. 온디바이스 AI 의 개념\n나. 온디바이스 AI 의 하드웨어 및 소프트웨어 기술\n다. 온디바이스 AI 의 시사점"], "importances": ["상", "중"]}]}, {"id": "p6", "title": "❻ 서비스", "color": "#f4f4f4", "topics": [{"name": "협업필터링", "count": 0, "questions": [], "importances": ["상"], "extra_tags": ["남훈"]}, {"name": "소버린 AI", "count": 1, "questions": ["소버린 AI 필요성과 기대효과에 대하여 설명하시오."], "importances": []}, {"name": "AI 데이터 품질관리 가이드라인 v3.5", "count": 1, "questions": ["인공지능(AI, Artificial Intelligence) 데이터 품질의 중요성이 점차 강조되고 있어, 2025 년 5 월 ‘AI 데이터 품질관리 가이드라인 v3.5’가 개정되었다. AI 데이터 품질관리에 대해 아래 사항을 설명하시오.\n가. AI 데이터 품질관리 개념 및 9 대 원칙\n나. AI 데이터 품질관리 프로세스 및 산출물\n다. AI 데이터 품질관리 지표"], "importances": ["상"]}, {"name": "데이터 거버넌스 - 표준화/리니지/카탈로그", "count": 1, "questions": ["최근 데이터 기반의 의사결정 및 AI 활용이 확대되면서 기업과 공공기관에서는 데이터의 정합성 확보, 가시성 향상, 추적 가능성을 위한 체계적인 관리 방안이 요구되고 있다. 다음 내용을 설명하시오.\n가. 데이터 표준화\n나. 데이터 리니지\n다. 데이터 카탈로그\n라. 데이터 표준화, 데이터 리니지, 데이터 카탈로그의 관계"], "importances": ["중"]}, {"name": "데이터 레이크 / 데이터 스웜프", "count": 1, "questions": ["인공지능 분석 대상 데이터의 대규모 저장소로서 데이터 레이크(Data Lake) 기반 통합 데이터 플랫폼을 도입하고자 한다. 다음을 설명하시오.\n가. 데이터 레이크(Data Lake)의 아키텍처\n나. 데이터 스웜프(Data Swamp) 발생 원인과 방지 방안"], "importances": ["중", "미평가"]}, {"name": "하네스 엔지니어링 (Harness Engineering)", "count": 0, "questions": [], "importances": [], "extra_tags": ["남훈"]}]}]};
+const IMP_CLS = {"최상":"imp-top","상":"imp-high","중":"imp-mid","하":"imp-low","미평가":"imp-none"};
+
+function openModal(pid, ti) {
+  const part = DATA.parts.find(p => p.id === pid);
+  const topic = part.topics[ti];
+  document.getElementById('modal-title').textContent = topic.name;
+
+  const badgesEl = document.getElementById('modal-badges');
+  badgesEl.innerHTML = '';
+  if (topic.count >= 2) {
+    badgesEl.innerHTML += '<span class="badge imp-top">필수 (셀테 ' + topic.count + '회 출제)</span>';
+  } else if (topic.count === 1) {
+    badgesEl.innerHTML += '<span class="badge imp-low">기출 1회</span>';
+  }
+  topic.importances.forEach(imp => {
+    badgesEl.innerHTML += '<span class="badge ' + IMP_CLS[imp] + '">' + imp + '</span>';
+  });
+  (topic.extra_tags || []).forEach(tag => {
+    if (tag === '남훈') {
+      badgesEl.innerHTML += '<span class="badge nahun">남훈</span>';
+    }
+  });
+
+  const qContainer = document.getElementById('modal-questions');
+  qContainer.innerHTML = '';
+  if (topic.questions.length === 0) {
+    const div = document.createElement('div');
+    div.className = 'empty-note';
+    div.textContent = '해당 셀테 자료에서 직접 출제된 문제가 확인되지 않았습니다.';
+    qContainer.appendChild(div);
+  } else {
+    topic.questions.forEach((q, idx) => {
+      const div = document.createElement('div');
+      div.className = 'question-block';
+      const num = document.createElement('span');
+      num.className = 'qnum';
+      num.textContent = 'Q' + (idx+1) + '. ';
+      div.appendChild(num);
+      const textSpan = document.createElement('span');
+      textSpan.textContent = q;
+      div.appendChild(textSpan);
+      qContainer.appendChild(div);
+    });
+  }
+
+  document.getElementById('overlay').classList.add('active');
+}
+
+function closeModal(e) {
+  document.getElementById('overlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
